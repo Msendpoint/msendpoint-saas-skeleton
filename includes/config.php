@@ -8,7 +8,14 @@ define('HERO_SUBTITLE', 'Unleash the power of the cloud with our next-gen SaaS p
 
 // Payment settings
 define('STRIPE_URL', '#');
-define('PRICE_MONTHLY', '$19');
+define('PRICE_MONTHLY', '$9');
+define('PRICE_SOURCE', '$19');
+
+// Microsoft 365 / Graph API Settings (Populated during Build)
+define('MS_CLIENT_ID', 'YOUR_CLIENT_ID');
+define('MS_CLIENT_SECRET', 'YOUR_CLIENT_SECRET');
+define('MS_REDIRECT_URI', 'http://localhost/msendpoint/apps/<?= $slug ?>/auth.php');
+define('MS_TENANT_ID', 'common');
 
 // Social links
 define('GITHUB_URL', 'https://github.com/Msendpoint');
