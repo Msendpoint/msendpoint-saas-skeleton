@@ -123,6 +123,8 @@ $user = $_SESSION['ms_user_profile'] ?? null;
         </div>
     </footer>
 
+    <?php render_success_overlay(); ?>
+
     <script>
         // Subtle entrance reveals
         document.addEventListener('DOMContentLoaded', () => {

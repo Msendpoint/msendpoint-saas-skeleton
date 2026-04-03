@@ -131,7 +131,109 @@ function render_css() {
         }
 
         .premium-card { animation: slideIn 0.6s ease-out backwards; }
+
+        /* ── SUCCESS OVERLAY ── */
+        .success-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            animation: fadeOut 0.5s ease-in forwards;
+            animation-delay: 3.5s;
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; pointer-events: none; }
+        }
+
+        .checkmark-circle {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            display: inline-block;
+            vertical-align: top;
+            margin-bottom: 2rem;
+        }
+
+        .checkmark {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: var(--accent-primary);
+            stroke-miterlimit: 10;
+            box-shadow: inset 0px 0px 0px var(--accent-primary);
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+
+        .checkmark-check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        @keyframes stroke { 100% { stroke-dashoffset: 0; } }
+        @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
+        @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 75px rgba(34, 211, 238, 0.05); } }
+
+        .confetti-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-primary);
+            top: -10px;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(360deg); }
+        }
     </style>
+    <?php
+}
+
+function render_success_overlay() {
+    if (!isset($_GET['success'])) return;
+    ?>
+    <div class="success-overlay">
+        <div class="confetti-container">
+            <?php for($i=0; $i<40; $i++): ?>
+                <div class="confetti" style="left: <?= rand(0, 100) ?>%; animation-duration: <?= rand(2, 5) ?>s; animation-delay: <?= rand(0, 3) ?>s; opacity: <?= rand(3, 8)/10 ?>; background: <?= rand(0,1) ? 'var(--accent-primary)' : '#fff' ?>;"></div>
+            <?php endfor; ?>
+        </div>
+        
+        <div class="checkmark-circle">
+            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+        </div>
+        
+        <h2 style="font-family: var(--font-display); font-size: 2.5rem; color: #fff; margin-bottom: 0.5rem; text-align: center;">Subscription Active!</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem; text-align: center;">Welcome to the premium experience. Redirecting to your dashboard...</p>
+    </div>
+    <script>
+        // Clean URL after animation to prevent loop
+        setTimeout(() => {
+            const url = new URL(window.location);
+            url.searchParams.delete('success');
+            window.history.replaceState({}, document.title, url);
+        }, 4500);
+    </script>
     <?php
 }
 
